@@ -1,0 +1,42 @@
+
+
+
+
+
+
+
+
+
+
+
+& \rotatebox{90}{bidule}
+& \rotatebox{90}{machin}
+& \rotatebox{90}{chose}
+
+
+
+
+
+
+\subsection{Unordered Composition}
+We call \textit{unordered composition functions} operations that do not take into account the order of the input elements and can accommodate any number of input elements.
+Typical examples for vectors are element-wise min, max, and average (also respectively called min-, max-, and average-pooling).
+
+Unordered composition-based models have proven their effectiveness in a variety of tasks, for instance sentence embedding~\cite{dan:2015:iyyer}, sentiment classification~\cite{adan:2016:chen} and feature classification~\cite{cdan:2017:gardner}.
+This family of method allows for varying sizes of input to be processed at a relatively low computational cost, by opposition to recurrent models like LSTM.
+On the flipside, we lose the information related to the order of the input elements.
+
+
+\subsection{Metric Learning}
+\textit{Metric learning}~\cite{vae-metric-learning:2018:xudong} is a process used to train embedding models, by making their embedding space have properties of a metric.
+To achieve this, a loss is used to reduce the distance between the embeddings of equal elements and increase the distance between embeddings of different elements.
+Multiple losses can achieve this, such as \textit{pairwise loss} and \textit{triplet loss}. 
+Triplet loss considers the embeddings of three elements: an input $x$, some $x'$ judged equal to $x$ and some $y$ different from $x$.
+In some approaches~\cite{deep-metric-multispeaker:2020:kulkarni}, a predictor (typically a MLP) is used to predict a distance between the embeddings, instead of applying a standard distance directly on the embeddings.
+
+It is possible to learn metrics on different aspects of the elements, by splitting the embedding into different segments and learn a different metric on each segment~\cite{deep-metric-multispeaker:2020:kulkarni}.
+
+Metric learning is usually used to approximate actual metrics.
+However, its process can be applied to learn other kinds of measures not fitting the definition of a metric.
+The current paper falls in this case.
+%For this reason, we designate measures used with the metric learning process as \textit{pseudo-metric} by analogy.

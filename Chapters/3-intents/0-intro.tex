@@ -1,0 +1,30 @@
+BoA allows us to generate embeddings of attributes and objects, and to reconstruct the FC from those embeddings.
+As we have a representation of objects, which can be seen as sets of attributes, we can use this same representation for intents, which are also sets of attributes.
+The reconstruction performance of BoA should allow us to generate intent embeddings and to decode them.
+
+%\todo[inline]{\large Grammarly up to here}
+
+Based on those results and the results of our preliminary experiments described in \cref{sec:prelim}, we designed a 4 phase approach to build an intent generation model:
+\begin{enumerate}
+    \item train a BoA auto-encoder;
+    \item train a simple model to predict an upper bound of the number of concepts from the attribute embeddings, based on the predictor learned with BoA;
+    \item design a model to predict the intents and the cover and order relations, using LSTM and the attention mechanisms tested in the preliminary experiments;
+    \item as we expect the previous model to produce imperfect results given the performance of the preliminary models, an additional can be designed to ``refine'' the results.
+\end{enumerate}
+Once the whole system is finished, a final fine-tuning of the whole system should be performed.
+%
+This approach allows us to split the task into simpler problems.
+Each phase produces a layer of the final model, and allows to train and evaluate them independently.
+Consequently, it is easier to determine the weak-points of the architecture and improve the architecture accordingly.
+Additionally, the first phase is already solved and the second one should be trivial.
+This second approach is closer to the naive concept generation algorithm than the graph-based approach, because we first generate the set of intents and then compute the order between them.
+
+%We at least have a lower bound for the results of the \nth{3} phase: the results of the exploratory process.
+We successfully implemented this approach, with the BoA model, a DAN upper bound predictor, and an attention-based LSTM lattice generator, respectively described in \cref{ch:boa}, \cref{sec:upper-bound}, and \cref{sec:intent-generation}.
+However, due to time constraints, we focused on improving the results of phase 3 instead of designing and training the ``refiner'' of phase 4.
+Such modification of the approach do not prevent us form providing results for the rest of the architecture, which is one of the advantages of our modular approach.
+We describe our training process and the performance of our current model in \cref{sec:fcat-expe}.
+
+
+
+

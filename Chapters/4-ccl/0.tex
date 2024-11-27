@@ -1,0 +1,65 @@
+% Do not forget to position your work in the realm of cognitive science/NLP.
+% Conclude with the successes you have gained at this internship, and possibly critiques. Specify what you may have missed in your university education, perhaps also what has particularly served you.
+
+In this internship, we explored methods to reproduce FCA using NNs by focusing on the generation of concept lattices.
+The task we tackled is not much documented. To bridge this gap in the literature, we conduct a very exploratory work.
+
+Our initial approach relied on GraphRNN, and did not produce the intended results.
+However, it allowed us to tackle multiple challenges.
+First, we developed a data format to represent lattices in a way usable in deep learning.
+To achieve this, we designed a concept ordering based on what we call levels, in replacement for the breadth-first search used in GraphRNN. %\todo{faire plus clair (comme si pas lu le rapport}
+Then, handling GraphRNN led us to explore multiple methods to represent and manipulate adjacency matrices for $\leq$ and $\prec$.
+
+Finally, we addressed the problem of the representation of FCs of any size.
+%
+To handle this challenging task, we developed BoA, an embedding architecture for FCs.
+This embedding method is flexible and data agnostic, and is published in the workshop FCA4AI of the conference ECAI with the article~\cite{boa:2020:marquer}.
+Most of the properties of BoA were designed towards intent generation.
+For instance, to train BoA, we designed a similarity measure for attributes based on their co-appearance in the intents, the co-intent similarity. %\todo{faire plus soft}
+
+%Motivated by the task of intent generation, 
+We evolved our approach to make the most of the properties of the new BoA model by centering the architecture on intent generation.
+%To profit from the properties of the new BoA model, we evolved our approach by centering it on intent prediction.
+Along the way, we designed a simple and effective model to predict a reasonable upper bound of the number of concepts.
+Our intent model uses a variety of attention mechanisms along with an LSTM to predict intent embeddings.
+This design decision was led by preliminary tests on multiple common architectures.
+It is interesting to note that we reproduce the inner process of GraphRNN with our self attention mechanism.
+Indeed, we iteratively add intents and predict their relation with previous intents, similarly to how GraphRNN handles adjacency.
+
+The performance of the intent model is heavily dependent on the quality of the BoA model.
+As observed in~\cite{boa:2020:marquer}, the current BoA can be improved in several ways.
+For instance, the co-intent similarity is not correctly predicted.
+We expect that embeddings already containing this notion of intent would greatly improve the performance of the generative model.
+%We have many tracks to improving BoA, that will be explored and published during the beginning of our Ph.D.
+Due to time constraints, we were unable to finalize the approach.
+However, we designed a first end-to-end intent model which provides baseline results for intent generation.
+%We have many tracks to improving BoA, that will be explored and published during the beginning of our Ph.D.
+%We have many tracks to improving BoA, but due to time constraints we preferred to finalize a first end-to-end intent model.
+%That way, we would have a complete framework to test the impact of each improvement we will bring to the components.\todo{phrase courte: preparer d'autres features pour être soumis}
+%\todo{due to time constraint, we were unable to finalize the approach..., (but continue to expore in the phd)}
+%In the available time, we did not manage to implement the final ``refiner'' component of our intent model.
+%However, we developed a complete intent model after exploring multiple variants, and provide baseline results for the intent generation task using NNs.
+%
+We have 3 main tracks to improve our current approach, that will be explored and published during the beginning of our Ph.D.
+Firstly, improving BoA, the foundation of our approach, would positively impact the performance of the whole framework.
+We are thinking of working on the variational aspect of the embedding model, in addition to rectifying the co-intent similarity prediction.
+Secondly, adding the planned refiner and further training the full intent model would improve the performance.
+Thirdly, we have plans to explore applications of BoA on other fields than FCA, \eg, pattern mining, sentiment analysis, and information retrieval.
+%If those explorations are fruitfull, the intent generation architecture could be used 
+
+%\todo{this last paragraph is ... meh}
+Finally, we used a wide variety of models, from node and graph neural frameworks to complex generative models, passing by attention mechanism and embedding models based on FCA. Most of these models come from or are extensively developed in natural language processing (NLP). 
+Firstly, recurrent architectures like LSTM are extensively used in language modeling.
+Secondly, attention models first appeared for alignment automatic translation~\cite{attention:2015:bahdanau}. They were further developed in the transformer and reformer models~\cite{reformer:2020:kitaev,transformer:2017:vaswani}, both designed for translation too.
+Thirdly, word2vec~\cite{word2vec:2013:mikolov} is one of the most famous word embedding architecture which was adapted in a wide variety of domains, including FCA with FCA2VEC~\cite{fca2vec:2019:durrschnabel} and node embedding with node2vec~\cite{node2vec:2016:grover}.
+In a nutshell, a large portion of the work presented in this thesis relies on NNs used in NLP.
+Additionally, FCA is well known to go from row data to knowledge and supports many semantic web tasks such as ontology building, \eg, extracting properties of pharmaceutical products from medical articles to build an ontology of pharmaceutical substances and their effects. The knowledge can then be fed back into NLP systems, \eg, a chatbot for medical monitoring.
+%In conclusion, while FCA itself is a mathematical field of knowledge processing, it
+
+%+ txt mining, info retrival
+%+ sentiment analysis basée FCA
+
+At the beginning of the internship, we lacked mathematical bases in lattice theory to make the most of the FCA process.
+The fundamentals in FCA, ontologies and data mining that are taught in the NLP master of \textit{Université de Lorraine} greatly helped us to fill the blanks.
+Furthermore, our accumulated expertise in a wide variety of models used in NLP helped us in manipulating the NN architectures we encountered.
+It also helped us in developing a meaningful approach to FC embedding and intent generation.

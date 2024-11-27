@@ -1,0 +1,74 @@
+
+\section{Training\label{sec:boa-training}}
+In this section, we explain how we train BoA.
+We describe the training process in \cref{sec:boa-training-process} and the randomly generated dataset in \cref{sec:boa-training-data}. In \cref{sec:augment}, we define a data augmentation pipeline used to improve the generalization capacity of BoA and compensate for some of the biases of the random generation. Finally, we explain in \cref{sec:kl-problem} a problem we encountered with the variational aspect of BoA.
+
+\subsection{Training Process}\label{sec:boa-training-process}
+We train BoA in two phases of 5000 epochs each.
+In the first phase, we apply the reconstruction loss and the KL divergence only.
+Then, we gradually introduce the prediction of the co-intent similarity and the number of concepts.
+%
+When using metric learning with multiple distances, a common approach is to split the embedding space and to learn one distance per sub-part of the embedding space~\cite{deep-metric-multispeaker:2020:kulkarni}.
+We apply the same principle and use 50\% of the embedding space to predict the co-intent similarity and 25\% for the number of concepts.
+%
+The exact embedding dimension of BoA is 128, with a pre-embedding size of 64.
+The LSTM and the BLSTM have two layers each.
+The decoder MLP has four layers, and the MLPs used for distance prediction both have two layers.
+We use a ReLU activation function between all the layers of the model.
+
+\subsection{Training Dataset}\label{sec:boa-training-data}
+The dataset used for training BoA is composed of 6000 randomly generated formal contexts and the corresponding lattices split into training and validation.
+We generate a training set of 5000 contexts and a test set of 1000 samples using the generation principle described in \cref{sec:data-generation}.
+For the training phase, a development set of 10\% of the training set is randomly sampled from the training set. 
+For each set, we generate different sizes of contexts, 20\% of each: $5 \times 5$, $10 \times 10$, $10 \times 20$, $20 \times 10$, and $20 \times 20$ contexts ($|O|\times|A|$).
+We report statistics of the generated datasets in \cref{tab:rand-dataset}.
+
+{%\smaller
+\begin{table}[t]
+\centering
+\begin{tabularx}{\textwidth}{rr>{\raggedleft\arraybackslash}X>{\raggedleft\arraybackslash}X>{\raggedleft\arraybackslash}X>{\raggedleft\arraybackslash}X}
+\toprule
+ & Dataset\hspace{-0.5em} & \# Object & \# Attribute & \# Concept & Density of $C$ \\
+\midrule
+\multirow{2}{*}{Mean $\pm$~std.\hspace{-1em}}
+& Train\hspace{-0.5em} & $12.83 \pm 6.11$ & $12.98 \pm 6.03$ & $77.93 \pm 78.39$ & $0.329 \pm 0.057$ \\
+& Test\hspace{-0.5em}  & $12.83 \pm 6.13$ & $12.97 \pm 6.04$ & $78.12 \pm 77.27$ & $0.332 \pm 0.057$ \\
+\midrule
+\multirow{2}{*}{Range\hspace{-1em}}
+& Train\hspace{-0.5em} & 1 to 20 & 2 to 20 & 1 to 401 & 0 to 0.56 \\
+& Test\hspace{-0.5em}  & 2 to 20 & 3 to 20 & 2 to 401 & 0 to 0.49 \\
+\bottomrule
+\end{tabularx}
+\caption{Descriptive statistics on the dataset of randomly generated contexts.}\label{tab:rand-dataset}
+\end{table}
+}
+
+\subsection{Data Augmentation}\label{sec:augment}
+We rely on plain random generation for the formal contexts, and not on more involved generation processes as discussed in~\cite{random-closure:2011:ganter,random-context-dirichlet:2019:felde}, so the random data is biased.
+We introduce a simple way to compensate for some of those biases while improving the generalization capability of the model using \textit{data augmentation}.
+In deep learning and machine learning in general, data augmentation is the process of artificially augmenting the amount of training data, typically by modifying existing training samples.
+We implement the following data augmentation pipeline: \textit{(i)} duplicating of objects and attributes, \textit{(ii)} inverting (dropping) the value of entries, and \textit{(iii)} shuffling objects and attributes.
+With this process, we simulate identical (duplication) and nearly identical (duplication + drop) objects or attributes that appear in real-world datasets.
+
+Objects and attributes have a probability $p$ of being duplicated.
+If duplicated, they have the same probability $p$ of being duplicated again.
+From this definition, the number of copies of an object (or attribute) follows a geometric law with a probability of success $p$.
+Consequently, the exact number of objects and attributes seen during training does not match the ones reported in \cref{tab:rand-dataset}.
+Nonetheless, the duplication follows a geometric law so we can estimate the number amount of objects and attributes seen as $number/(1 - p)$.
+Inverting some randomly selected values in the formal context is our adaptation of dropout, a common technique in deep learning.
+The shuffling after duplication avoids the model's reliance on the order of the objects and the attributes.
+We set the duplication probability to $p=0.1$ and the drop probability to $0.01$.
+In this setting, the estimated average object and attribute numbers are respectively $14.25$ and $14.42$, for both the training and development sets.
+
+When co-intent similarity is used, duplication and shuffling are reproduced on the intents.
+However, drops in a formal context alter the corresponding lattice, so they are not applied when using the intents to compute co-intent similarity.
+This precaution avoids making the model insensitive to small variations in the input.
+
+
+\subsection{Issues With KL Divergence}\label{sec:kl-problem}
+When adding the KL divergence to the prototype of BoA (initially a simple auto-encoder) the performance of the model was greatly impaired.
+The analysis of the predictions revealed the model was going for ``low hanging fruits'' and ignored the embeddings themselves, as described in~\cite{annealing-kl:2015:bowman}.
+To solve this issue we apply \textit{annealing}~\cite{annealing-kl:2015:bowman} and multiply the KL divergence by a lambda that we set to $10^{-3}$.
+This reduces the impact of the KL divergence on the training and allows the model to learn some features before the KL divergence comes into effect.
+However, it reduces the benefits we get from using a VAE.%\todo{Replace with "It reduces the benefits we get from using a VAE though."}
+

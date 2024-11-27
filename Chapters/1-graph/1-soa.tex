@@ -1,0 +1,97 @@
+
+
+\section{State of the Art of Graph Modeling\label{sec:graph-soa}}
+
+%\todo[inline]{This whole section uses ``generation'', ``modeling'', ``handle'' etc. It is necessary to check the use of the terms and find better suited terms if necessary. > generative model}
+
+
+In recent years, there has been an explosion of approaches to model graphs with NNs. Typical applications are knowledge graph processing and community graph detection.
+There exist a variety of approaches to graph modeling in the literature. In this section, we describe the main approaches of graph representation and generation, and their principal characteristics.
+For further details see, \eg, \cite{graph-nets:2019:many-authors} or the repository \url{https://github.com/dsgiitr/graph_nets}.
+
+%The various approaches for graph modeling using NNs vary along 2 major aspects. the data representation method and algorithm on one side, and what the model is capable of modeling on the other side.
+The various approaches for graph modeling using NNs vary along 2 major aspects: the data representation method and the kind of objects that the framework is capable of modeling, \eg, individual nodes or whole graphs.
+%
+Firstly, the representation and processing of the graph differ in how the two major aspects of the graph are represented.
+On the one hand, the structure of the graph is the adjacency between the nodes. It can be represented as an adjacency list, an adjacency matrix, a graph spectrum (see \cref{sec:soa-graph}), or implicitly by considering the neighborhood of a node.
+On the other hand, nodes can be represented either implicitly by only considering the structure of the graph, by an arbitrary identifier like a random value, or by a set of features or labels.
+As a reminder, \textit{features} of nodes in a graph are a set of properties contained in nodes, \eg, the name, age, and email address in a social network.
+\textit{Labels} are textual or numerical denominations of the nodes and edges, and can be seen as a specific kind of features.
+%
+%A graph NN can represent either nodes within graphs or whole graphs of a specific family.
+%A \textit{family} of graphs is a set of graphs sharing some specific structural properties, \eg, community graphs and ontologies.
+%Representing a node within a particular graph allows to manipulate node representation, \eg{} generating entity embeddings for knowledge graphs, where entities are nodes.
+%Graph NNs representing whole graphs are used to represent a specific class of graphs. In other words, they are trained to handle graphs sharing some specific structural properties, \eg{} community graphs.
+Secondly, graph NN can represent either nodes or whole graphs.
+We detail those two kinds of graph NNs respectively in \cref{sec:soa-node} and \cref{sec:soa-graph}, along with major graph NNs approaches.
+We explain why we chose to focus on GraphRNN in \cref{sec:graphrnn-choice}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Node-Centered Approaches\label{sec:soa-node}}
+The first group of graph NNs focuses on representing nodes.% within a single graph.
+This kind of NN can be trained on a specific graph to provide representations for this graph's nodes~\cite{word2vec:2013:mikolov,deepwalk:2014:perozzi}.
+It is used to generate local representations in particular for large and complex graphs, \eg{}, generating entity embeddings for knowledge graphs or node embeddings for community graphs.
+Graphs NNs representing nodes can also be used to represent whole graphs, by combining the representation of the nodes.
+However, it is also possible to learn a more general model to represent nodes by training on multiple graphs~\cite{gcn:2016:kipf}.
+
+A first method, proposed in DeepWalk~\cite{deepwalk:2014:perozzi}, is to mimic natural language processing (NLP) methods for learning sentences.
+The neighborhood of a node is \textit{linearized}, by taking a sequence of nodes obtained by randomly walking through the graph.
+The sequences of nodes are then processed as if they were sentences, with SkipGram~\cite{word2vec:2013:mikolov} in the case of DeepWalk.
+
+A second approach is \textit{message passing}, in which a node representation is built iteratively.
+The nodes' initial representation can be the features of the nodes (represented as vectors), or randomly generated values if there are no given features for the nodes.
+GraphSAGE~\cite{graph-sage:2017:hamilton} and Graphite~\cite{graphite:2018:grover} are examples of message passing neural algorithms, with~\cite{graphite:2018:grover} including a variational version of the Graphite.
+
+A third framework is \textit{graph convolution}, an adaptation of CNNs from grid-like structures like images to the more irregular structure of graphs.
+In practice, the kernel is applied to the neighborhood of a node as defined in graphs, instead of the spatial neighborhood of a cell in a matrix.
+Graph Convolutional Network (GCN)~\cite{gcn:2016:kipf} is the basic architecture implementing this approach, and Hypergraph Neural Network~\cite{hypergraph-nn:2018:feng} is an adaptation of GCNs to hypergraphs.
+Graph Attention Network (GAT)~\cite{gat:2017:velickovic}, Masked GCN~\cite{masked-gcn:2019:yang}, SPAGAN~\cite{spagan:2019:yang}, Hierarchical GAN~\cite{hierarchical-gan:2019:kim} are improvements of GCNs with attention mechanisms and other similar techniques. Those improvements allow the NN to select neighboring nodes based on the current node and the content of the neighbors.
+
+%spatial convolution (neighborhood): Graph Convolutional Network (GCN)~\cite{gcn:2016:kipf}, Hypergraph Neural Network~\cite{hypergraph-nn:2018:feng}
+%attention (giving different weights to different neighbors, depending on some features of the nodes):
+%Graph Attentional Network \todo[inline]{check name} (GAT)~\cite{gat:2017:velickovic}, Masked GCN~\cite{masked-gcn:2019:yang}, SPAGAN~\cite{spagan:2019:yang}, Hierarchical GAN~\cite{hierarchical-gan:2019:kim}.
+
+%%%
+\subsection{Whole Graph Approaches\label{sec:soa-graph}}
+Graph NNs representing whole graphs are used to represent graphs from a specific \textit{family} (or class) of graphs. In other words, they are trained to handle graphs sharing some specific structural properties, \eg, community graphs.
+This kind of graph NNs are used to perform tasks on a whole graph at once, \eg, classification of a graph and generating graphs of a specific family.
+
+A first method is \textit{spectral convolution}, introduced in~\cite{spectral-nn:2014:bruna} and with a more recent implementation called ChebNet~\cite{chebnet:2019:tang}.
+Spectral convolution is based on spectral graph theory, which represents a graph's adjacency using a spectrum.
+The spectrum of a graph provides a complete view of the graph's adjacency.
+A detailed introduction to spectral graph theory can be found, \eg, in~\cite{spectral-graph-lectures:1996:chung}.
+Spectral convolution is an application of CNNs on this spectrum of the graph.
+
+A second framework is \textit{hierarchical graph pooling}, presented in~\cite{hierarchical-graph-pooling:2018:ying}.
+This method is an iterative simplification of the graph by grouping strongly related nodes using clustering and pooling methods.
+Once a single group remains, the graph is fully simplified.
+
+A third approach is to use a VAE directly on the adjacency matrix of a graph, as implemented in GraphVAE~\cite{graph-vae:2016:kipf} and Constrained GraphVAE~\cite{constrained-graph-vae:2018:ma}.
+By flattening the adjacency matrix to a vector, it becomes possible to apply a VAE directly on the adjacency.
+This method performs well at generating graphs of specific families, despite being less involved than the other methods presented in this section.
+Indeed, it doesn't rely on specific properties of graphs to establish its architecture.
+
+A fourth method is to use recurrent models on a linearization of the graph, as done in GraphRNN~\cite{graphrnn:2018:jiaxuan}.
+In this approach, the graph is first transformed into a sequence of nodes, and the nodes are then processed iteratively.
+GraphRNN processes each node of the sequence by computing its edges with the previous nodes in the sequence.
+They rely on a breadth-first search to linearize the graph to make connected nodes close in the sequence.
+
+\subsection{Advantages of GraphRNN for Lattice Generation\label{sec:graphrnn-choice}}
+As a reminder, our goal is to learn a single neural model to generate lattices in general. We want the model to produce a whole lattice for each FC presented.
+From those constraints, we focus on graph NNs able to handle whole graphs at once.
+The architecture should also be able to generate graphs, and only GraphVAE, Constrained GraphVAE, and GraphRNN fit our criterion.
+
+A drawback of GraphVAE and Constrained GraphVAE is that they are limited in the size of the graph they can handle.
+Indeed, VAE has a fixed-sized input and output, so the two approaches are unable to handle graphs larger than the graphs they are trained on.
+Conversely, the recurrent nature of GraphRNN makes it very flexible with regard to the size of the generated graphs.
+
+A final argument in favor of GraphRNN is that it is easily extendable with node features.
+In our case, node features are the intent and extent of the concepts, and they are very important for our goal because they define the concept.
+In practice, when generating a new node, we would add a network to generate the intent or the extent to the link generation network of GraphRNN, as we explain in \cref{sec:graph-model-full}.
+
+GraphRNN shows \soa{} performance when generating graphs of various families, and can handle any size of graphs.
+However, it is not designed to generate specific graphs on request, as we would like to do to generate lattices based on the FCs.
+Conversely, constrained VAEs (such as Constrained GraphVAE~\cite{constrained-graph-vae:2018:ma}) are generative models that can be constrained.
+Using such a model would allow us to generate lattices under the constraint of the FCs.
+To compensate for the limitations of GraphRNN with regards to our goal, we decided to adapt GraphRNN into such a constrained VAE.
+As described in \cref{sec:graph-model}, we first adapt GraphRNN into an auto-encoder, which is later adapted into a VAE and then further modified as a constrained VAE.

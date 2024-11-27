@@ -1,0 +1,49 @@
+\section{Work Environment\label{sec:lab}}
+The internship project is a collaboration of the Orpailleur and Multispeech research teams from LORIA, within the frame of the Inria Project Lab HyAIAI. The internship took place within the LORIA research lab, under the supervision of Miguel Couceiro and Ajinkya Kulkarni.
+In this section, we briefly describe the LORIA lab (\cref{sec:loria}) as well as the Inria Project Lab HyAIAI (\cref{sec:hyaiai}).
+We also present the tools we used in our experiments (\cref{sec:g5k}).
+
+\subsection{LORIA, Orpailleur and Multispeech\label{sec:loria}}
+LORIA\footnote{\url{https://www.loria.fr/en}\label{fn:loria}} is a French mixed research unit (\textit{Unité Mixte de Recherche}, UMR 7503).
+In other words, it is a research lab shared by three institutions: the French national center for scientific research (\textit{Centre National de la Recherche Scientifique}, CNRS)\footnote{\url{www.cnrs.fr/en}}, the \textit{Universit\'{e} de Lorraine} (UL)\footnote{\url{http://welcome.univ-lorraine.fr/en}} and the Inria\footnote{\url{https://www.inria.fr/en}}, the national institute for research in digital science and technology.
+The LORIA was created in 1997 and focuses on both fundamental and applied research in computer sciences.
+The lab is directed by Jean Yves Marion together with the direction team. They are helped by a scientific council, a lab council, and an assembly of the researcher responsible for each team.
+
+The research in the lab is organized in 30 research teams, each focusing on specific thematic or goals.
+The teams are grouped in 5 research department depending on the main direction of the team's research:
+\begin{itemize}
+    \item the ``Algorithms, Computation, Image and Geometry'' department focuses on geometry and symbolic computation and its algorithmic problems;
+    \item the ``Formal Methods'' department focuses on ``analyzing, verifying and developing safe and secure software-based systems''\textsuperscript{\ref{fn:loria}} using formal methods;
+    \item the ``Networks, Systems and Services'' department focuses on large networks as well as parallel and distributed systems;
+    \item the ``Natural Language Processing and Knowledge Discovery'' department focuses on processing and modeling language and knowledge;
+    \item finally, research in the ``Complex Systems, Artificial Intelligence and Robotics'' department focuses on artificial intelligence and robotics.
+\end{itemize}
+
+Orpailleur and Multispeech are two teams of the ``Natural Language Processing and Knowledge Discovery'' department.
+Orpailleur\footnote{\url{https://orpailleur.loria.fr/}} groups researchers are interested in knowledge discovery and engineering while
+Multispeech\footnote{\url{https://team.inria.fr/multispeech/}} focuses on processing speech.
+Miguel Couceiro is the head of Orpailleur and Ajinkya Kulkarni is a Ph.D. student in Multispeech.
+
+\subsection{Inria Project Lab HyAIAI\label{sec:hyaiai}}
+Current and efficient machine learning approaches rely on complex numerical models, and the decisions which are proposed may be accurate but cannot be easily explained to the layman.
+That is a problem especially in some cases where complex and human-oriented decisions should be made, \eg{}, to get a loan or not, to obtain a chosen enrollment at university.
+
+HyAIAI\footnote{\url{https://project.inria.fr/hyaiai/}} (``Hybrid Approaches for Interpretable Artificial Intelligence'') is an Inria Project Lab (IPL) about the design of novel, interpretable approaches for artificial intelligence.
+%
+The objectives of the IPL HyAIAI are to study the problem of making machine learning methods interpretable, by designing hybrid ML approaches that combine \soa{},   numerical models (\eg{} neural networks) with explainable symbolic models (\eg{} pattern mining). %More precisely, one goal is to integrate high level domain constraints into ML models, to provide model designers information on ill-performing parts of the model, and to give the layman/practitioner understandable explanations on the results of the ML model.
+%
+Our goal of creating a neuro-symbolic framework for FCA is the first step towards integrating FCA into NNs.
+
+The IPL HyAIAI project involves seven Inria Teams, namely Lacodam in Rennes (project leader), Magnet and SequeL in Lille, Multispeech and Orpailleur in Nancy, and TAU in Saclay.
+
+
+
+\subsection{Tools, Repository and Testbed\label{sec:g5k}}
+Our project required several processing scripts and the implementation and training of the proposed NNs architectures.
+We stored our code on Gitlab.
+We used an Anaconda\footnote{\url{https://www.anaconda.com/}} environment with Python 3.8, the deep learning library PyTorch\footnote{\url{https://pytorch.org/}}, as well as major data science libraries (\eg{}, Pandas, Seaborn, ScikitLearn).
+The extensive list of packages used is available on our Gitlab repository\footnote{\url{https://gitlab.inria.fr/emarquer/fcat}}.
+
+Our experiments were run on Grid5000\footnote{\url{https://www.grid5000.fr}}, a platform for experimentation supported by a scientific interest group hosted by Inria and including CNRS, RENATER and several Universities as well as other organizations.
+Grid5000 provides computational clusters equipped with powerful \textit{graphic processing units} (GPUs) which are necessary to train NNs in reasonable time.
+In particular, we used the \textit{grue}, \textit{graffiti} and \textit{grele} clusters, whose description is available on Grid5000's website\footnote{\url{https://www.grid5000.fr/w/Nancy:Hardware}}.

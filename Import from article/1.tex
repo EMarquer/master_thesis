@@ -1,0 +1,95 @@
+\section{Foundations And Notations}\label{seq:notations}
+\subsection{Formal Concept Analysis}\label{sec:fca}
+In this section we quickly recall some FCA notions and the corresponding notations used in this paper.
+For further detail on FCA see~\cite{fca-images:2017:ignatov}.
+
+In FCA, a formal context is a triple $\langle A, O, \mathcal{I}\rangle $,
+where $A$ is a finite set of attributes, $O$ a finite set of objects,
+and $\mathcal{I} \subseteq A \times O$ is a relation between $A$ and $O$ called incidence.
+We denote objects as $o \in O$, and attributes as $a \in A$.
+We write the number of attributes as $|A|$ and the number of objects as $|O|$.
+
+In our approach, we use a binary representation of the formal context.
+It is the representation of the incidence as a binary table $C$ with objects as rows and attributes as columns.
+The row of $C$ corresponding to $o$ is written $C_{o}$, and the column of $C$ corresponding to $a$ is written $C_{a}$.
+The cell of $C$ corresponding to $o$ and $a$, written $C_{o,a}$, contains $1$ if $o$ is related to $a$ by $\mathcal{I}$ and $0$ otherwise.
+For simplicity we will use \textit{formal context} to designate $C$ in the rest of the paper.
+
+\todo[color=green!40]{this paragraph is new}
+Based on the formal context, FCA defines a pair of derivation operators
+$.': 2^A \rightarrow 2^O, B \mapsto B' := \{o\in O|\forall a\in B, (o, a) \in \mathcal{I}\}$
+and $.': 2^O \rightarrow 2^A, B \mapsto B' := \{a\in A|\forall o\in B, (o, a) \in \mathcal{I}\}$.
+%
+A pair $\langle i, e\rangle$ where $e'=i$ and $i'=e$ holds is called \textit{formal concept}, with $e \subseteq O$ the \textit{extent} and $i \subseteq A$ the \textit{intent}.
+%Based on the formal context FCA defines \textit{formal concepts} as pairs $\langle i, e\rangle$ if $e'=i$ and $i'=e$,
+%where $e \subseteq O$ is called \textit{extent} and $i \subseteq A$, \textit{intent}.
+The order relation $\leq$ on concepts is defined as $\langle i_1, e_1\rangle \leq \langle i_2, e_2\rangle \iff i_1 \subseteq i_2$.
+The set of formal concepts together with $\leq$ form a lattice $L$ called \textit{formal concept lattice}.
+We write $I \subset 2^A$ the set of intents of $L$ and $E \subset 2^O$ the set of extents.
+For simplicity we will use \textit{lattice} instead of \textit{formal concept lattice}.
+
+%\todo{implications, canonical base}
+
+\subsection{Neural Networks}
+\todo{see to remove this NN section, discuss with FCA experts if there are some thing which are "obvious" enough}
+\textit{Neural networks} are a class of statistical connectionist models trained using the \textit{backpropagation} algorithm.
+The training is done by processing inputs with the model and evaluating the quality of the output using a \textit{loss function}.
+By minimizing this loss, the model learns to approximate the expected output.
+
+In this article, we detail several kinds of models (or \textit{architectures}) frequently used in \textit{deep learning}.
+For detailed information on the neural architectures mentioned in this section, we recommend~\cite{tuto-lstm:2019:staudemeyer}.
+A multi-layer perceptron (MLP) is the simplest architecture of neural network.
+It is composed of multiple layers, called \textit{feed-forward layers}.
+Each output of a linear layer is a linear composition of all its inputs.
+Between layers, the values are transformed by an \textit{activation function} to increase the expressive capacity of the model.
+The \textit{rectified linear unit} (ReLU) and \textit{sigmoid} are among the most common.
+A \textit{long- short-term memory network} (LSTM) is a neural network of a family called \textit{recurrent networks}.
+This family of models handles sequences of inputs of variable length, 
+By transmitting and updating a vector called \textit{hidden state} from one step of the sequence to the following one, each output depends on the current input as well as the previous ones.
+A variant of the LSTM, called \textit{bi-directional LSTM} (bi-LSTM), uses a second LSTM to process the input sequence in the reverse direction.%\todo[color=green!40]{dimension $\implies$ direction}
+
+\subsection{Auto-Encoders And Embeddings}
+%\subsubsection{Auto-Encoders}
+\textit{Auto-encoders} are a class of deep learning models composed of:
+\textit{(i)} an encoder, taking some $x$ as an input and produces a latent representation $z$;
+\textit{(ii)} a decoder, taking $z$ as an input and reconstructing $\hat{x}$ a prediction of $x$.
+%The model learns to reresent $x$ into $z$ with a the training objective
+By training the model to match $x$ and $\hat{x}$, the model learns to compress $x$ into $z$. We call the training objective matching $x$ and $\hat{x}$ the \textit{reconstruction loss}.
+Auto-encoders are one of the methods to generate representation of data as vectors. In that case $z$ is called the \textit{embedding} of $x$, and the real-valued space in which $z$ is defined is called the \textit{embedding space}.
+
+%\subsubsection{Variational Auto-Encoders}
+Unlike traditional auto-encoders, \textit{variational auto-encoders} (VAEs)~\cite{vae:2013:kingma} encode a distribution for each value of $z$ instead of the value itself.
+In practice, for each element of $z$, the encoder produces two values: a mean $\mu$ and standard deviation $\sigma$.
+When training the model, $z$ is sampled from the normal distribution defined by $\mu$ and $\sigma$.
+Finally, the distribution defined by $\mu$ and $\sigma$ is normalized by using an additional loss term called \textit{KL divergence}.
+To make this process differentiable and be able to train the model, a method called \textit{reparametrization}~\cite{vae:2013:kingma} is used.
+
+VAEs are known to provide better generalization capabilities and are easier to use to decode arbitrary embeddings, compared to classic auto-encoders.
+This property is useful for generation, as we can train a model generating embeddings then decode them with a pre-trained VAE.
+Thus, VAEs have been used in a wide variety of applications to improve the quality of embedding spaces: image~\cite{vae:2013:kingma}, speech~\cite{deep-metric-multispeaker:2020:kulkarni} and graph generation~\cite{graph-vae:2016:kipf} for example.
+%However, using a VAE instead of a classical auto-encoder can decrease the performance for some tasks.\todo{add citation}
+%To use a VAE as an encoder once it is trained, we do not sample $z$ from the distribution and use $\mu$ .
+
+
+\subsection{Unordered Composition}
+We call \textit{unordered composition functions} operations that do not take into account the order of the input elements and can accommodate any number of input elements.
+Typical examples for vectors are element-wise min, max, and average (also respectively called min-, max-, and average-pooling).
+
+Unordered composition-based models have proven their effectiveness in a variety of tasks, for instance sentence embedding~\cite{dan:2015:iyyer}, sentiment classification~\cite{adan:2016:chen} and feature classification~\cite{cdan:2017:gardner}.
+This family of method allows for varying sizes of input to be processed at a relatively low computational cost, by opposition to recurrent models like LSTM.
+On the flipside, we lose the information related to the order of the input elements.
+
+
+\subsection{Metric Learning}
+\textit{Metric learning}~\cite{vae-metric-learning:2018:xudong} is a process used to train embedding models, by making their embedding space have properties of a metric.
+To achieve this, a loss is used to reduce the distance between the embeddings of equal elements and increase the distance between embeddings of different elements.
+Multiple losses can achieve this, such as \textit{pairwise loss} and \textit{triplet loss}. 
+Triplet loss considers the embeddings of three elements: an input $x$, some $x'$ judged equal to $x$ and some $y$ different from $x$.
+In some approaches~\cite{deep-metric-multispeaker:2020:kulkarni}, a predictor (typically a MLP) is used to predict a distance between the embeddings, instead of applying a standard distance directly on the embeddings.
+
+It is possible to learn metrics on different aspects of the elements, by splitting the embedding into different segments and learn a different metric on each segment~\cite{deep-metric-multispeaker:2020:kulkarni}.
+
+Metric learning is usually used to approximate actual metrics.
+However, its process can be applied to learn other kinds of measures not fitting the definition of a metric.
+The current paper falls in this case.
+%For this reason, we designate measures used with the metric learning process as \textit{pseudo-metric} by analogy.

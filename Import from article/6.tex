@@ -1,0 +1,49 @@
+\section{Discussion And Future Work}\label{seq:future-work}
+We know that random generation of contexts and lattices is a active problem of the FCA community.
+In particular, random generation do not match the distribution of real-world formal contexts, and introduce several biases.
+For example, the stegosaurus effect is discussed in \cite{random-contexts:2016:borchmann}.
+While we use plain random generation, it could be beneficial to use a more accurate generation algorithms like those discussed in \cite{random-closure:2011:ganter,random-context-dirichlet:2019:felde}.
+Nonetheless, BoA achieving acceptable performance while being trained on simply generated contexts is encouraging.
+Training BoA using better generation algorithms should perform even better.
+
+According to~\cite{dan:2015:iyyer}, the choice of the unordered composition function (mean, max or other) have minimal impact on the performance in their setting. 
+However, it would be interesting to check which one performs best in our setting as both functions have different properties.%, for both the object embedding creation and the aggregation of the ``other'' attributes.
+
+%Despite the various setbacks caused by the KL divergence\todo{Formulate less aggressively}, our model has a 
+The proposed auto-encoder achieve a high reconstruction performance for seen sizes.
+The performance for contexts of 50 objects and attributes and high number of concepts stays above
+Using more varied training samples would further improve the performance.
+%
+Our model manages to predict the number of concepts from the context.
+This will prove helpful for concept generation, the original goal of our investigation.
+%
+However, the co-intent similarity prediction has range for improvement.
+In particular, normalizing and choosing a more appropriate loss could significantly improve the performance.
+We can expect that any improvement to the metric learning process would increase the quality of the embeddings.
+
+The link prediction task do not provide reliable evidence of the performance of object embeddings, due to various issues.
+We propose using another dataset for an object classification task.
+The \textit{mushroom} dataset is a good candidate, due to its clear classification objective and extensive investigation.
+%Another dataset may however be a better choice, to avoid biases linked with the over-exploitation of the dataset.\todo{If we keep this sentence, cite the corresponding article. For now, I couldn't find back the article.}
+%
+The proposed model performs better on attribute clustering than FCA2VEC in a majority of cases.
+Additionally, obtaining the same performance with the full embedding and the PCA variant is encouraging.
+Based on this result, we should be able to greatly reduce the embedding size.
+
+
+
+
+
+%Co-intent similarity loss, 0.16672 -> 0.05: co-intent similarity is NOT learnt (mostly) -> normalisation (log, exp,...) [0;1] ~> [0;inf[
+%Suggestion mean-variance norm
+%mandatory +1 to every single similarity? MSE on [1;2] should work
+
+
+\section{Conclusion}
+In this work, we introduce a new measure of attribute similarity called \textit{co-intent similarity}.
+Furthermore, we successfully develop a generalized representation of formal contexts with information from FCA.
+Our approach is data agnostic and scales to real-world datasets such as the SPECT heart dataset.
+It is also relatively unaffected by the density of the formal context.
+Moreover, it is based on randomly generated data of relatively small dimension (up to 20 objects and attributes).
+%
+Our experimental results are encouraging, as our general approach achieves performance similar to FCA2VEC, a dataset specific one.

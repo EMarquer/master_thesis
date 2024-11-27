@@ -1,0 +1,19 @@
+
+
+It is essential to represent FCs, to reproduce FCA using neural networks.
+Ideally, we want to have a general embedding framework for FCs capable of handling data of arbitrary dimensions while encoding much of the contextual information.
+
+FCA2VEC~\cite{fca2vec:2019:durrschnabel} is, to our knowledge, the only framework to generate embeddings of objects and attributes from an FC. This approach, which we explain in \cref{sec:fca2vec}, has several limitations.
+Firstly, the embeddings for objects and attributes are not defined in the same embedding space, which can be problematic when processing objects and attributes together. Secondly, the embedding models need to be trained separately on every processed FC, which is costly. Thirdly, there is no guaranty that the resulting embeddings can be used to generalize across FCs, which is blocking for our goal of developing a single model able to handle FCs.
+
+To overcome these limitations, we propose an embedding framework for FCs.
+As mentioned in \cref{sec:problem}, we focus on attributes and intents.
+To design this framework, we asked ourselves what attributes are, and in particular, which aspects of the attributes should interest us to reproduce FCA.
+We decided to focus on how attributes interact with each other, and more precisely, which attributes appear together and how often.
+This answer is based on the following observation: attributes that always appear together in the same dataset appear in the same intents, in the same concepts.
+%Our answer is based on the observation that attributes that always appear together in the same dataset appear in the same intents, in the same concepts.
+%We are interested in how attributes interact with each other, and more precisely, which attributes appear together and how often.
+However, we are not interested in the order of the attributes, because changing said order in an FC will not change the resulting lattice.
+
+We detail the resulting architecture, \textit{Bag of Attributes} (BoA), in \cref{sec:boa}, and present experimental results in \cref{sec:boa-expe}.
+BoA is the object of an article~\cite{boa:2020:marquer} published in the 8th FCA4AI (``What can FCA do for Artificial Intelligence?'') workshop\footnote{\url{https://fca4ai.hse.ru/2020/}}. A significant portion of the content of this section is a reformulation of the article~\cite{boa:2020:marquer}.

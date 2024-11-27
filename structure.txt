@@ -1,0 +1,10 @@
+I/ Project Frame
+1. intro
+2. presentation Loria, Inria, Orpailleur, HyAiAi
+3. basic background
+4. pb statement
+
+II/ Generate Lattices as Graphs
+1. 
+
+III/ Generate Intents

@@ -1,0 +1,53 @@
+\section{Introduction} % + related works
+In recent years there has been a budding interest in various approaches to make the most of formal knowledge and artificial neural networks.
+As mentioned in~\cite[p. 6]{neuro-symbolic-survey:2017:many-authors}, these approaches have a ``generally hierarchical organization'', with the ``lowest-level network [taking] raw data as input and [producing] a model of the dataset''.
+Traditionally, these networks represent data into real-valued vectors called \textit{embeddings}.
+
+% FCA + intention
+Formal concept analysis (FCA) is a powerful formal tool for understanding complex data.
+Replicating its mechanisms using neural networks could help understanding complex datasets, particularly large ones.
+Following this idea, we want to reproduce the general extraction process of FCA with neural network architectures.
+But to achieve this, we first need a general embedding method for contexts.
+As we want to work with any formal context, the embedding model needs to handle data of varied dimensions.
+Furthermore, the embeddings should to contain as much information related to contexts as possible.
+%Following this idea, we wanted to generate intents from formal contexts using neural networks.
+%But to achieve this we need to encode any formal context into a single embedding space.
+%As we want to work with any formal context, the embedding model need to be flexible with regards to data dimensions.
+%Also, the embeddings have to contain as much information related to intents (thus attributes) as possible.
+
+% existant
+To our knowledge, there are few approaches that represent formal contexts using FCA notions.
+For example~\cite{clustering-bipartie-closure:2013:gaume} applies graph clustering on formal contexts by representing them as bipartite graphs.
+However, only one of those approaches provide embeddings:
+FCA2VEC~\cite{fca2vec:2019:durrschnabel}, proposed by Durrschnabel \textit{et al.} to embed formal contexts using the closure operator from FCA.
+FCA2VEC is composed of 3 models: \textit{attribute2vec} and \textit{object2vec}, 2 models based on \textit{word2vec}~\cite{word2vec:2013:mikolov}; 
+and \textit{closure2vec}, based on a distance between closures of attribute sets.
+\textit{Closure2vec} in particular is based on~\cite{encoding:2007:rudolph} that proved simple feed-forward neural networks could encode any closure operators.
+A major advantage of those models is that they produce embeddings of extremely low dimensions (2 and 3) to facilitate interpretability.
+%
+% fca2vec pbs
+Yet FCA2VEC does not meet our requirements, because it is not ``general'' enough:
+the embedding models need to be trained on each formal context, so there is no guarantee we can use them to train a single model on multiple formal contexts.
+Furthermore, the embeddings for objects and attributes are not defined in the same embedding space, because FCA2VEC models for objects and attributes are separate (attribute2vec and closure2vec on one side, object2vec on the other).
+This can be problematic to use objects and attributes together.
+
+% contributions
+To overcome these limitations and meet our requirements, we propose an embedding model that demonstrates the feasibility of generalized representation of formal contexts with information from FCA.
+We call this model \textit{Bag of Attributes} (BoA).
+Our framework provides embeddings for objects and attributes.
+It is based on unordered composition and \textit{long- short-term memory neural network} (LSTM).
+In addition to that, we apply the principles of metric learning with the number of concepts and a new measure of attribute similarity called \textit{co-intent similarity}.
+This novel approach differs from the existing ones as it is agnostic to the data.
+Indeed, the model can accommodate any number of objects and attributes and works on unseen, real-world formal contexts despite being trained on randomly generated ones.
+As BoA uses a single embedding space for all contexts, it should work better than FCA2VEC for applications on general aspects of FCA.
+Furthermore, our approach provides a shared embedding space for objects and attributes by composing object embeddings from attribute embeddings.
+%Furthermore, by composing object embeddings from attribute embeddings our approach provides a shared embedding space for objects and attributes.
+%Using metric learning provides models to predict the learned metrics, and learning additional metrics makes BoA easy to expand.
+In this paper, we explore the advantages and limits of our model and provide experimental results on attribute clustering on the SPECT heart dataset and co-authorship prediction on the ICFCA dataset.
+For those experiments, we compare the performance of BoA with FCA2VEC and show similar results for co-authorship prediction and better performance on attribute clustering.
+
+In \autoref{seq:notations}, we introduce our notations and briefly recall some FCA and neural network principles used for the model.
+The architecture of BoA is defined in \autoref{seq:model}, and the next section presents the corresponding training process and dataset.
+We explore the limits of our novel architecture in \autoref{seq:limits}.
+Section \ref{seq:experiments} describes our experiments on attribute clustering and co-authorship prediction using real-world datasets.
+Finally, we present our plans to further develop the approach and conclude in \autoref{seq:future-work}.

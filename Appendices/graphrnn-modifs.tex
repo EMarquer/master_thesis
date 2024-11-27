@@ -1,0 +1,17 @@
+\chapter{Modifications applied} % Main appendix title
+\label{app:graphrnn-mods}
+
+In this appendix we present some of the modifications we tested to improve the performance of the GraphRNN VAE.
+
+\section{Sharing and Pre-Training the Node-Level Model}
+
+\section{Stop Loss}
+stop vector VS I/O vector
+BCE on individual positions
+
+\section{Pseudo-Transitive Closure Loss}
+Pseudo-transitivity as a differential alternative to transitivity, instead of BCE
+in practice, values are number of pathes between Top and this node
+
+\section{Training the Decoder With or Without Gold Input}
+provide expected sequence as a tensor, in a more standard seq2seq setting

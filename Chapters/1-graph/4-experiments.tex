@@ -1,0 +1,77 @@
+
+\section{Preliminary Experiments and Change of Approach\label{sec:graph-expe}}
+To determine the feasibility of the proposed architecture, we first experimented with the reconstruction performance of our VAE without node features, in other words without intent.
+
+\subsection{Reconstruction Performance Without Features}
+On a few samples of small size, the reconstruction performance of the VAE was satisfying. 
+Examples of reconstructions an early stage proof of concept model are shown in \cref{fig:graph-reconstruction}. This proof of concept model was trained on less than 20 samples smaller than 5 objects and attributes.
+However, the prediction performance on our larger dataset described in \cref{sec:data-generation} is not as good.
+We experimented with various variants of the model, but without major improvement in the performance.
+Those changes include, but are not limitted to, predicting $\leq$ or $\prec$, completely sharing the parameters of the decoder and the encoder, and pretraining.
+The performance on the development set of our best model, detailed in \cref{tab:graphrnn-perf}, stays relatively low, with an average F1 score of $0.13$ at best when reconstructing the graph of $\prec$.
+
+\begin{figure}
+    \centering
+    \subcaptionbox{Prediction}{$\begin{bmatrix}
+2 & 3 & 1 & 1 & 0 & 0 & 0 & 0 & 4\\
+2 & 1 & 3 & 0 & 1 & 0 & 1 & 0 & 4\\
+2 & 1 & 0 & 3 & 0 & 1 & 0 & 0 & 4\\
+2 & 0 & 0 & 1 & 3 & 1 & 0 & 0 & 4\\
+2 & 0 & 0 & 1 & 0 & 3 & 0 & 1 & 4\\
+2 & 0 & 1 & 0 & 1 & 0 & 3 & 1 & 4\\
+2 & 0 & 0 & 0 & 0 & 1 & 1 & 3 & 4
+    \end{bmatrix}$}
+    \subcaptionbox{Gold (expected output)}{$\begin{bmatrix}
+2 & 3 & 1 & 1 & 0 & 0 & 0 & 0 & 4\\
+2 & 1 & 3 & 0 & 0 & 0 & 1 & 0 & 4\\
+2 & 1 & 0 & 3 & 1 & 1 & 0 & 0 & 4\\
+2 & 0 & 0 & 1 & 3 & 0 & 1 & 0 & 4\\
+2 & 0 & 0 & 1 & 0 & 3 & 0 & 1 & 4\\
+2 & 0 & 1 & 0 & 1 & 0 & 3 & 1 & 4\\
+2 & 0 & 0 & 0 & 0 & 1 & 1 & 3 & 4
+    \end{bmatrix}$}
+    \subcaptionbox{Legend}{~~$
+    \begin{matrix}
+        0:& \text{NO EDGE}\\
+        1:& \text{EDGE}\\
+        2:& \text{SOS}\\
+        3:& \text{MOS}\\
+        4:& \text{EOS}\\
+        5:& \text{PAD}
+    \end{matrix}
+    $}
+    \caption{Example of lattice reconstruction in the early stages.}%Legend: $0$: NO EDGE; $1$: EDGE; $2$: SOS; $3$ MOS; $4$: EOS; $5$: PAD.
+    \label{fig:graph-reconstruction}
+\end{figure}
+
+It is hard to compare those results with those presented in~\cite{graphrnn:2018:jiaxuan} as we do not use the same evaluation tools.
+Indeed, GraphRNN is evaluated in~\cite{graphrnn:2018:jiaxuan} by comparing structural statistics of predicted graphs with those of true graphs of the modeled family.
+Conversely, because our goal is to correctly reconstruct a specific lattice and not any lattice-like graph, we use measures of prediction performance, \eg, the F1 score.
+However, given the performance of GraphRNN demonstrated in~\cite{graphrnn:2018:jiaxuan}, we expected higher reconstruction performance, with an F1 score above $0.7$ at least.
+
+\begin{table}
+\centering
+\begin{tabular}{lrrrr}
+\toprule
+Relation & Accuracy & Precision &   Recall &       F1\\
+       \midrule
+$\prec$ & 0.80 $\pm$ 0.05 &  0.50 $\pm$ 0.55 & 0.078 $\pm$ 0.089 & 0.13 $\pm$ 0.15\\
+$\leq$  & 0.72 $\pm$ 0.03 &  0.50 $\pm$ 0.55 & 0.046 $\pm$ 0.055 & 0.084 $\pm$ 0.100\\
+\bottomrule
+\end{tabular}
+\caption[Prediction performance of the GraphRNN VAE on the development set, for the adjacency matrices of the graphs of $\prec$ and $\leq$.]{Prediction performance of the GraphRNN auto-encoder, for adjacency matrices of the graphs of $\prec$ and $\leq$. The prediction performance for entries is reported (mean $\pm$ std.).}
+\label{tab:graphrnn-perf}
+\end{table}
+
+\subsection{Formal Concept Representation and Change of Approach}
+To generate the lattice from the FC we decided to add a condition to our VAE.
+Ideally, this condition should be the FC in some form. Because the usual constrained VAE architecture requires fixed-sized condition vectors, the representation of the FC has to be of fixed size for any FC.
+We could then generate the concept lattice using exclusively the FC as the input, by using some default embedding instead of the output of the encoder.
+This process can be seen as being able to generate any lattice, and using the condition to specify which lattice we want: the one corresponding to our FC.
+Another option would have been to generate lattice embedding from the FC, in the embedding space defined by our GraphRNN VAE.
+
+Obtaining a detailed enough representation of the complexity of the FC is challenging, because the information defining the lattice is not directly accessible.
+Additionally, we have constraints on the size of the representation due to our needs.
+Focusing on this problem led us to design BoA presented in \cref{ch:boa}.
+The results of the BoA model together with the poor performance of the basic auto-encoder led us to modify our lattice approach.
+The new approach is detailed in \cref{ch:intents}.

@@ -1,0 +1,32 @@
+\section{Problem Statement\label{sec:problem}}
+Our main objective for this project is to provide a grounded proof of concept, demonstrating the feasibility of concept lattice generation using NNs.
+We focus on providing a fully working and general framework, able to handle unseen FCs with no technical constraint on the size.
+The generation performance and the explainability are also taken into account, but they are secondary. Indeed, extensive training of the model can easily boost the performance once the framework is designed. Additionally, we orient our design choices to facilitate the integration of explainable methods in future work.
+Finally, we do not consider the computational optimization of the methods as a major concern.
+
+In the previous section, we saw that a formal concept lattice is defined by a set of concepts and a partial order relation between the concepts.
+Given the relations between the order relation $\leq$, $<$, and $\prec$, a single one of them is enough to describe the partial order between the concepts.
+Also, the set of concepts can be completely described using either the set of intents or the set of extents.
+%
+From those two aspects, we can apply the principle of ``divide and conquer'' to split the difficult task of lattice generation into simpler tasks:
+on the one hand, generating the order between the concepts, and on the other hand, defining the concepts themselves.
+Additionally, the order relation can be described by graphs (\eg, the graphs of $<$ and $\prec$), with the concepts being the nodes of the graph, so \soa{}, methods in graph generation can be used.
+
+Two approaches can be devised to solve the tasks of generating the concepts and the order between them: (\textit{i}) generating the order between the concepts first and then defining the concepts, and (\textit{ii}) generating the concepts, then computing the order relation between them. Each of these approaches focuses on a different aspect of the formal concept lattice.
+We explore the first approach in \cref{ch:graph} by adapting \soa{} methods to generate the graphs of lattices.
+In \cref{ch:intents}, we focus on generating the intents using the information from the FC, thank to the BoA embedding model for FCs described in \cref{ch:boa}.
+
+Our choice of working with the intents to define the concepts comes from the assumption that $|A| \leq |O|$ in most datasets, so focusing on intents should be less costly than with the extents as fewer elements are involved.
+In cases where this assumption is not verified ($|A| > |O|$), we can exchange the objects and the attributes.
+Indeed, if we exchange them the resulting lattice is the same, except $\leq$ and $\prec$ which respectively become $\geq$ and $\succ$, and the intents and extents which are swapped with one another.
+In practice, this exchange of $A$ and $O$ corresponds to using the transposed $C$ instead of $C$ itself.
+It is easy to swap back the intents and extents in the output and to reverse the order and cover relations to get the expected lattice.
+In simple words, whether we design our method by focusing on intents or extents, we can adapt it to the other case with simple transformations.
+
+% For both approaches, our main objective is to provide a grounded proof of concept, demonstrating the feasibility of concept lattice generation using NNs.
+% Our main goal is to provide a fully working and general framework, able to handle unseen FCs with no technical constraint on the size.
+% The generation performance and the explainability are secondary goals, and we do not consider the computational optimisation of the methods as a major concern.
+%To achieve our goals, we first study the existing methods and decide on the representation to use for the FCs and the lattices.
+%We then design the NN architecture to use and perfrorm qualitative or quantitative experiments on a dataset of FCs and the corresponding lattices.
+%We iterate between the designa and the experimental steps, untill
+ 

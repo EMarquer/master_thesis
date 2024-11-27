@@ -1,0 +1,9 @@
+In this chapter we explore the reconstruction of the lattice as a relation between formal concepts.
+As a relation corresponds to a graph, we can use the \soa{} graph-generation methods described in \cref{sec:graph-soa} to generate the lattice.
+
+Our goal which is to learning a single model to generate all the lattices leads us to focus on models able to generate families of graphs. In particular, we selected GraphRNN~\cite{graphrnn:2018:jiaxuan}, for the reasons explained in \cref{sec:graphrnn-choice}, and adapted it into a constrained VAE presented in \cref{sec:graph-model}. We also adapted their graph encoding method to represent lattices as we describe in \cref{sec:data-format}.
+
+We performed preliminary experiments with this method as described in \cref{sec:graph-expe}.
+However, the challenge of how to use the FC as a condition for the VAE, together with the relatively poor generation performance, led us to put aside the graph generation approach and focus on generating the concepts first, as described in \cref{ch:intents}.
+The BoA embedding framework, described in \cref{ch:boa}, is the result of our tentative to make the FC usable as a condition for the VAE.
+As we did not finalize the approach, the corresponding code is not present in our GitLab repository.%\todo{jump to ch4}

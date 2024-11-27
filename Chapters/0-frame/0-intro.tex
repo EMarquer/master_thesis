@@ -1,0 +1,51 @@
+\section{Introduction}
+%\todo{speak of neuro-symbolic approaches?}
+In recent years there has been an increasing interest in approaches to combine formal knowledge and \textit{artificial neural networks} (NNs), called \textit{neuro-symbolic} approaches~\cite{neuro-symbolic-survey:2017:many-authors,neuro-symbolic-computing:2019:many-authors}.
+%Theses approaches, called \textit{neuro-symbolic} approaches, can be implemented along different axes, as mentioned in~\cite{neuro-symbolic-survey:2017:many-authors,neuro-symbolic-computing:2019:many-authors}.
+%One way to combine is by extracting knowledge using neral networks \cite[p. 15]{neuro-symbolic-computing:2019:many-authors}
+%As mentioned in~\cite[p. 6]{neuro-symbolic-survey:2017:many-authors}, these approaches have a ``generally hierarchical organization'', with the ``lowest-level network [taking] raw data as input and [producing] a model of the dataset''. These networks represent data as real-valued vectors called \textit{embeddings}.
+%One of theses axes is to integrate formal knowledge extraction with NNs.
+%
+%\todo{speak of FCA (and its uses)}
+%\todo{Strange}While most neuro-symbolic approaches described in~\cite{neuro-symbolic-survey:2017:many-authors,neuro-symbolic-computing:2019:many-authors} focus on formal logic, \textit{formal concept analysis} (FCA) is another powerful tool for understanding complex data.
+\textit{Formal concept analysis} (FCA) is a powerful  formal tool for understanding complex data called \textit{formal context} (FC) (see \cref{sec:fc}).
+FCA can be used to generate a structured view of the data, typically a hierarchy of \textit{formal concepts} called \textit{concept lattice} (see \cref{sec:lattice}) or an ontology. %It is used, \eg, to identify specific markers on genes from medical data or to extract lexico-semantic knowledge from corpora.
+It can also discover implications between some aspects of the data and generate explainable formal rules grounded on the data.
+This can be used to construct decision systems from the data.
+
+%\todo{Justify project}
+Replicating FCA's mechanisms using NNs could help processing complex and large datasets~\cite{fca2vec:2019:durrschnabel,lattice-based-nn:2017:kuznetsov} by tackling FCA's scalability issues~\cite{comparing-fca-algorithms:2010:kuznetov}.
+%It could also help integrate FCA into connectionist pipelines, \eg, to predict relations between objects or to extract a meaningful subset of rules from large dataset.
+%Finally, it may allow us to discover new aspects that the standard FCA process doesn't explore.
+It could also help integrate FCA into connectionist pipelines and allow us to discover new aspects that the standard FCA process doesn't explore.
+Following this idea, we want to reproduce the general discovery process of FCA with NN architectures.
+This asks for a general framework capable of generating concept lattices using exclusively the FC.
+
+%\todo{Explain scarcity of neuro-symbolic approach in FCA}
+%For example~\cite{clustering-bipartie-closure:2013:gaume} applies graph clustering on formal contexts by representing them as bipartite graphs.
+To our knowledge, there are only a few neuro-symbolic approaches involving FCA.
+Rudolph \etal{}~\cite{encoding:2007:rudolph} show how to encode closure operators with simple feed-forward NNs.
+Gaume \etal{}~\cite{clustering-bipartie-closure:2013:gaume} make the parallel between FCA and bipartite graph analysis, by considering the FC as a bipartite graph. %However, this approach does not involve deep learning, even if it offers an alternative set of tools to reproduce FCA.
+In~\cite{lattice-based-nn:2017:kuznetsov}, Kuznetsov \etal{} present an approach to construct NNs from the results of FCA.
+More recently, Dürrschnabel \etal{}~\cite{fca2vec:2019:durrschnabel} present FCA2VEC, a framework to represent FCs by encoding FCA's closure operators, using the results of~\cite{encoding:2007:rudolph}.
+However, those approaches do not offer a complete neural framework to approximate FCA.
+
+% contributions
+To overcome these limitations, we explore two complementary approaches to the generation of concept lattices using NNs, respectively the generation of lattices as labeled graphs and the generation of concept intents.
+Our work provides a framework for the task of reproducing FCA using NNs, supported by experimental results that serve as a baseline.
+We also provide a representation framework for FCs called \textit{Bag of Attributes} (BoA) that we detail in~\cite{boa:2020:marquer}.
+%\todo[inline]{insert practical example here?}
+%The two approaches, respectively the generation of lattices as labeled graphs and the generation of intents, are described and justified in \cref{sec:problem}.
+
+%\todo{Be more precise}
+This report is organized as follows.
+\cref{ch:frame} introduces the subject and the background of the project. % including a description of our work environment, some background knowledge and a description of the project goals.
+In \cref{sec:lab} we present the Inria Project Lab HyAIAI and the LORIA laboratory, as well as our main development tools. In \cref{sec:background_fca} and \cref{sec:background_nn} we introduce basic notions respectively of FCA and deep learning.
+Finally, we explain the goals of the project in \cref{sec:problem}.
+%
+We describe the two approaches we explored respectively in \cref{ch:graph} and \cref{ch:intents}, by presenting a detailed overview of the literature, a description of the NN architectures we tested and the experiments we ran.
+\cref{ch:graph} contains an overview of the \soa{} of graph generation, a description of our data representation and generation process, and the details of the architecture we developed in our initial approach based on graphs.
+The challenges encountered when designing this architecture led us to create BoA, an embedding framework to represent FCs.
+BoA is detailed in \cref{ch:boa} together with FCA2VEC~\cite{fca2vec:2019:durrschnabel}.
+\cref{ch:intents} is the description of the second approach we explored, a very modular approach to the problem of lattice generation focused on intents.
+Finally, we discuss the results of the project and explain some plans to further expand our approach in \cref{ch:ccl}.

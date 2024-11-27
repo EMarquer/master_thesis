@@ -1,0 +1,92 @@
+\section{Experiments on real-world datasets}\label{seq:experiments}
+In this section we explore the performance of the model for two tasks on real-world datasets.
+We reproduce the link prediction and attribute clustering tasks from~\cite{fca2vec:2019:durrschnabel}, used to evaluate their object2vec (o2v) and attribute2vec (a2v) models respectively.
+We use the CBoW and SG variants of the two models with embedding size of 3 as in the paper.
+
+We use the same ICFCA dataset as~\cite{fca2vec:2019:durrschnabel} for link prediction.
+For attribute clustering however, we use SPECT heart\footnote{\url{https://archive.ics.uci.edu/ml/datasets/SPECT+Heart}}.
+It is a smaller dataset than \textit{wiki44k}~\cite{fca2vec:2019:durrschnabel}, with dimensions closer to our training data: 68 objects and 23 attributes.
+
+We train FCA2VEC models using the same settings as~\cite{fca2vec:2019:durrschnabel}, with 20 random iterations of each model.
+To obtain comparable results, we reduce the embeddings produced by BoA to 3 dimensions by applying two standard dimensionality reduction techniques:
+\textit{principal component analysis} (PCA) and \textit{t-distributed stochastic neighbor embedding} (TSNE).
+To determine if the results are significant, we use Student t-test on means.
+
+
+We report the link prediction performance in \autoref{tab:object}.
+Our three BoA variants show a significantly different performance from o2v SG, with all the p-values lower than $0.005$.
+%
+We found that the classifier based on BoA, the one with the best F1 score, systematically answers positive.
+%Our TSNE variant seem performs normally however.
+Additionally, we fail to reproduce the performance of~\cite{fca2vec:2019:durrschnabel} (F1 score of $0.69$ for o2v CBoW, $0.66$ for o2v SG)
+Finally, the ICFCA context is very sparse: it has a density of $0.003$ on the train and $0.005$ on the test set.
+Due to this, the task may not be representative of the performance of the object embeddings on most datasets.
+%
+These results hint that the task needs to be adapted to get proper insight on the object embedding performance.
+
+
+The attribute clustering performance is repported in \autoref{tab:attribute}.
+In this experiment, we find that the CBoW variant performs significantly better than the SG (all t-test p-values under $0.0005$).
+This is the opposite of the result found by~\cite{fca2vec:2019:durrschnabel} for attribute clustering.
+However, this result may be due to using a different dataset.
+Interestingly, our BoA PCA variant performs equally to the full BoA.
+The performance of BoA (and BoA PCA) is significantly better than a2v CBoW for 2 and 5 clusters (p-values under $10^{-14}$).
+For 10 clusters however, a2v CBoW performs significantly better (p-value under $0.001$).
+%
+%Our model show a relative improment of 6\% for 2 clusters and 57\% for 5 clusters.
+Our model improves the performance of a2v CBoW by 4\% for 2 clusters and 8\% for 5 clusters.
+
+
+
+\begin{table}[t]
+\caption{Performance on the link prediction task (mean~$\pm$~std.).}\label{tab:object}
+\centering
+\begin{tabular}{lrrr}
+\toprule
+model &  precision & recall & F1 \\
+\midrule
+o2v CBoW    &  $0.63 \pm 0.05$ & $0.46 \pm 0.05$ & $0.53 \pm 0.05$ \\
+o2v SG      &  $0.70 \pm 0.04$ & $0.49 \pm 0.03$ & $0.57 \pm 0.02$ \\
+\midrule
+BoA PCA 3d  &  $0.65$ & $0.42$ & $0.51$ \\
+BoA TSNE 3d &  $0.58$ & $0.67$ & $\mathbf{0.62}$ \\
+BoA         &  $0.50$ & $1.00$ & $\mathbf{0.67}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\caption{Performance on the attribute clustering task with 2, 5 and 10 clusters (mean~$\pm$~std.).}\label{tab:attribute}
+\centering
+\begin{tabular}{lrrr}
+\toprule
+model              & k = 2 & k = 5 & k = 10 \\
+\midrule
+a2v CBoW           & $0.66 \pm 0.00$ &  $0.14 \pm 0.02$ & $\mathbf{0.063 \pm 0.013}$ \\
+a2v SG             & $0.35 \pm 0.13$ &  $0.11 \pm 0.03$ & $0.042 \pm 0.010$ \\
+\midrule
+BoA TSNE 3d & $0.30$ & $0.29$ & $0.044$ \\
+BoA PCA 3d  & $\mathbf{0.70}$ & $\mathbf{0.22}$ & $0.051$ \\
+BoA         & $\mathbf{0.70}$ & $\mathbf{0.22}$ & $0.051$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\caption{Performance on the link prediction and attribute clustering tasks (mean~$\pm$~std.).}\label{tab:object_attribute}
+\centering
+\scalebox{.9}{
+\begin{tabular}{lcrrrcrrr}
+\toprule
+&~~&\multicolumn{3}{c}{Link prediction}&~~&\multicolumn{3}{c}{Attribute clustering}\\
+model &~~&  precision & recall & F1 && k = 2 & k = 5 & k = 10 \\
+\midrule
+o2v CBoW    &~~&  $0.63 \pm 0.05$ & $0.46 \pm 0.05$ & $0.53 \pm 0.05$ && $0.66 \pm 0.00$ &  $0.14 \pm 0.02$ & $\mathbf{0.063 \pm 0.013}$ \\
+o2v SG      &~~&  $0.70 \pm 0.04$ & $0.49 \pm 0.03$ & $0.57 \pm 0.02$ && $0.35 \pm 0.13$ &  $0.11 \pm 0.03$ & $0.042 \pm 0.010$ \\
+\midrule
+BoA TSNE &~~&  $0.58$ & $0.67$ & $\mathbf{0.62}$ && $0.30$ & $0.29$ & $0.044$ \\
+BoA PCA  &~~&  $0.65$ & $0.42$ & $0.51$ && $\mathbf{0.70}$ & $\mathbf{0.22}$ & $0.051$ \\
+BoA         &~~&  $0.50$ & $1.00$ & $\mathbf{0.67}$ && $\mathbf{0.70}$ & $\mathbf{0.22}$ & $0.051$ \\
+\bottomrule
+\end{tabular}}
+\end{table}

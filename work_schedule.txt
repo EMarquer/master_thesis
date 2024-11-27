@@ -1,0 +1,54 @@
+Week 13-17 Fev:
+    "standard" parts must be finished
+        company presentation
+        fca notation
+        nn basics
+    detailed outline must be finished
+Week 20-24 Fev:
+Week 27-31 Fev:
+    Graph generation
+Week 3-7 Aug:
+    Intent generation
+Week 10-14 Aug:
+Aug 17th: report unofficial deadline, to make sure to have all the reviews
+Augt 24th: report official deadline
+September 2-3th: Defense
+
+The report should be send to the head of the second year and the University supervisor at least 8 days before the defense (strict) (digital copy and hard copy if it asked by the university supervisor). You must provide a hard copy for the head of the second year before the defense.
+
+maximum of 50 pages
+
+instructions
+    A cover page pointing out the names of the host organization, the date of the internship, the title of the report, student’s name, the degree concerned and the composition of the jury (supplied later).
+    Table of contents
+    The effective portion: the internship
+    The figures will be accompanied by a caption,
+    The bibliographic reference from the press about will be at the end of the report,
+    The annexes appear at the end of the report,
+    Typography will be the same for the entire text. Avoid underlining and bold,
+    Consider numbering the pages (and correct spelling errors)
+
+recommended content
+I – Description of the host organization
+    Host Organization: make a brief description, do not include brochures or other advertisements developed by the company itself; specify its size and its objectives.
+
+    Facilities and Services: specify the size of the staff and its organization; specify the type of equipment, software, methods used.
+    
+II – Presentation of the problem
+    Explain the problem to be solved and – if it is part of a chain or a larger environment – its frame. Think of which stage of a project this work is a part of: study of the existing, writing about specifications, technical study, conception, implementation, validation, ...
+    
+III – Work done
+    Develop your work as clearly as possible. Give here an explanation of the choices made, methods and tools used and the results obtained. Do not hesitate to illustrate all by figures, images (screenshots, ...)
+
+    Do not forget to position your work in the realm of cognitive science/NLP.
+    
+IV – Conclusion
+    Conclude with the successes you have gained at this internship, and possibly critiques. Specify what you may have missed in your university education, perhaps also what has particularly served you.
+
+
+
+
+G5K
+Additionally, Grid'5000 must be acknowledged in all publications presenting results or contents obtained or derived from the usage of Grid'5000. All those publications must be added to the Grid'5000 collection on the HAL Open Archive (https://hal.archives-ouvertes.fr/GRID5000). This can be achieved by adding your publication to HAL (possibly without the full text), and specifying "GRID5000" in the collaboration field. The official acknowledgment to use in your publication is the following:
+
+    Experiments presented in this paper were carried out using the Grid'5000 testbed, supported by a scientific interest group hosted by Inria and including CNRS, RENATER and several Universities as well as other organizations (see https://www.grid5000.fr).
